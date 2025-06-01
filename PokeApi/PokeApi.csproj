@@ -62,4 +62,19 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\DTO\DTO.csproj" />
+	  <ProjectReference Include="..\ENT\ENT.csproj" />
+	  <ProjectReference Include="..\Services\Services.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\jugar.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\topScores.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

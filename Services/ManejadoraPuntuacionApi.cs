@@ -17,7 +17,7 @@ namespace Services
         /// Obtiene un listado completo de puntuaciones desde la API ordenado de mayor a menor
         /// </summary>
         /// <returns>Lista de puntuaciones</returns>
-        public static async Task<List<clsPuntuacion>> getListadoPuntuacionessAsync()
+        public static async Task<List<clsPuntuacion>> getListadoPuntuacionesAsync()
         {
             Uri requestUri = new Uri($"{urlBase}");
 
@@ -57,7 +57,7 @@ namespace Services
         /// </summary>
         /// <param name="nuevaPuntuacion"></param>
         /// <returns>Código de estado HTTP de la respuesta</returns>
-        public static async Task<int> AgregarPersonaAsync(clsPuntuacion nuevaPuntuacion)
+        public static async Task<int> AgregarPuntuacionAsync(clsPuntuacion nuevaPuntuacion)
         {
             Uri requestUri = new Uri($"{urlBase}");
             int filasAfectadas = 0;
