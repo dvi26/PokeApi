@@ -50,7 +50,7 @@ namespace PokeApi.Models
             {
                 if (pokemonSeleccionado.Id == pokemonCorrecto.Id)
                 {
-                    this.puntos += segundosRestantes;
+                    puntos += segundosRestantes;
                 }
                 else
                 {

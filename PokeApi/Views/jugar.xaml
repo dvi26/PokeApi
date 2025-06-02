@@ -12,6 +12,16 @@
 
     <VerticalStackLayout Padding="20" Spacing="25" HorizontalOptions="Center" VerticalOptions="Center">
 
+        <Label Text="{Binding PuntuacionTotal} "
+           FontSize="18"
+           TextColor="Black"
+           HorizontalOptions="Start" />
+
+        <Label Text="{Binding RondasTotales , StringFormat='Rondas Totales: {0} /20'}"
+   FontSize="18"
+   TextColor="Black"
+   HorizontalOptions="End" />
+
         <Label Text="{Binding Contador}" 
                FontSize="48" 
                FontAttributes="Bold" 
@@ -25,7 +35,8 @@
 
         <CollectionView ItemsSource="{Binding PreguntaActual.ListaPokemons}" 
                         SelectionMode="Single"
-                        SelectedItem="{Binding PokemonSeleccionado, Mode=TwoWay}">
+                        SelectedItem="{Binding PokemonSeleccionado, Mode=TwoWay}"
+                        >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" Margin="5">

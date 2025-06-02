@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using ApiMaui.Resources;
 using DTO;
 using PokeApi.Models;
 using Services;
@@ -14,12 +15,22 @@ namespace PokeApi.ViewModels
 {
     public class jugarVM : BindableObject,INotifyPropertyChanged
     {
+        #region Atributos
         private int contador;
         private clsPregunta preguntaActual;
         private int puntuacionTotal;
         private clsPokemon pokemonSeleccionado;
         private int rondasTotales = 0;
+        private DelegateCommand insertarCommand;
+        #endregion
 
+        #region Propiedades
+              
+        public int RondasTotales
+        {
+            get { return rondasTotales; }
+            private set { rondasTotales = value; NotifyPropertyChanged("RondasTotales"); }
+        }
 
         public int PuntuacionTotal
         {
@@ -56,19 +67,32 @@ namespace PokeApi.ViewModels
             }
         }
 
+        public DelegateCommand InsertarCommand
+        {
+            get
+            {
+                return insertarCommand;
+            }
+        }
+        #endregion
+
+        #region Constructor
         public jugarVM()
         {
             _ = cuentaAtras();
             _ = cargarPregunta();
+            //insertarCommand = new DelegateCommand(insertarPuntuacion(),activarBoton());
         }
+        #endregion
 
+        #region Funciones
         private async Task cuentaAtras()
         {
             bool res = true;
-            rondasTotales++;
+            RondasTotales++;
             Contador = 5;
             //Lo he puesto a 1.5 segundos para que se vea mejor el efecto
-            if (rondasTotales <= 20)
+            if (RondasTotales <= 20)
             {
                 Dispatcher.StartTimer(TimeSpan.FromSeconds(1.5), () =>
                 {
@@ -128,6 +152,7 @@ namespace PokeApi.ViewModels
 
             PreguntaActual = new clsPregunta(pokemonCorrecto, listaPokemon);
         }
+        #endregion
 
         #region NotifyPropertyChanged
 

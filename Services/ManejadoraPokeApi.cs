@@ -62,7 +62,7 @@ namespace Services
                     foto = (string?)data["sprites"]?["front_default"];
                 }
 
-                // Si nada funciona, usa una imagen por defecto o vacía
+                // Si nada funciona, usa una imagen por defecto 
                 if (string.IsNullOrEmpty(foto))
                 {
                     foto = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png";
