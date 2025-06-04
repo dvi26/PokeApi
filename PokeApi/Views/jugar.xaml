@@ -4,13 +4,15 @@
              x:Class="PokeApi.Views.jugar"
              Title="Jugar"
              xmlns:local="clr-namespace:PokeApi.ViewModels"
-             BackgroundColor="White">
+             BackgroundColor="White"
+>
 
     <ContentPage.BindingContext>
         <local:jugarVM />
     </ContentPage.BindingContext>
 
-    <VerticalStackLayout Padding="20" Spacing="25" HorizontalOptions="Center" VerticalOptions="Center">
+    <Grid>
+        <VerticalStackLayout Padding="20" Spacing="25" HorizontalOptions="Center" VerticalOptions="Center">
 
         <Label Text="{Binding PuntuacionTotal} "
            FontSize="18"
@@ -31,15 +33,30 @@
         <Image Source="{Binding PreguntaActual.PokemonCorrecto.Foto}"
                HeightRequest="200" 
                WidthRequest="200" 
-               HorizontalOptions="Center" />
+               HorizontalOptions="Center" 
+                />
+            
 
-        <CollectionView ItemsSource="{Binding PreguntaActual.ListaPokemons}" 
+            <CollectionView ItemsSource="{Binding PreguntaActual.ListaPokemons}" 
                         SelectionMode="Single"
-                        SelectedItem="{Binding PokemonSeleccionado, Mode=TwoWay}"
-                        >
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" Margin="5">
+                        SelectedItem="{Binding PokemonSeleccionado, Mode=TwoWay}">
+
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" Margin="5">
+                        <Frame.VisualStateManager.VisualStateGroups>
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="LightSkyBlue" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </Frame.VisualStateManager.VisualStateGroups>
                         <Label Text="{Binding Nombre}" 
                                FontSize="20" 
                                HorizontalOptions="Center" 
@@ -50,4 +67,5 @@
         </CollectionView>
 
     </VerticalStackLayout>
+    </Grid>
 </ContentPage>

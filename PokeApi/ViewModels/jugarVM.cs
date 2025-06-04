@@ -19,7 +19,7 @@ namespace PokeApi.ViewModels
         private int contador;
         private clsPregunta preguntaActual;
         private int puntuacionTotal;
-        private clsPokemon pokemonSeleccionado;
+        //private clsPokemon pokemonSeleccionado;
         private int rondasTotales = 0;
         private DelegateCommand insertarCommand;
         #endregion
@@ -39,17 +39,17 @@ namespace PokeApi.ViewModels
         }
         public clsPokemon PokemonSeleccionado
         {
-            get { return pokemonSeleccionado; }
+            //get { return PreguntaActual.PokemonSeleccionado; }
             set
             {
-                pokemonSeleccionado = value;
+                //pokemonSeleccionado = value;
                 if (PreguntaActual != null && PreguntaActual.PokemonSeleccionado == null)
                 {
                     PreguntaActual.PokemonSeleccionado = value;
                     PreguntaActual.comprobarCorrecto(Contador);
                     PuntuacionTotal += PreguntaActual.Puntos;
                 }
-                NotifyPropertyChanged("PokemonSeleccionado");
+                //NotifyPropertyChanged("PokemonSeleccionado");
             }
         }
 

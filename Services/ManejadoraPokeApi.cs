@@ -42,6 +42,7 @@ namespace Services
             {
                 string json = await response.Content.ReadAsStringAsync();
                 JObject data = JObject.Parse(json);
+                
 
                 string nombre = (string)data["name"];
 
