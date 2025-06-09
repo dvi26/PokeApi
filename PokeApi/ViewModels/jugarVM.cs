@@ -22,10 +22,13 @@ namespace PokeApi.ViewModels
         //private clsPokemon pokemonSeleccionado;
         private int rondasTotales = 0;
         private DelegateCommand insertarCommand;
+        private bool haCambiado = false;
+        //private bool primeraVez = true;
+
         #endregion
 
         #region Propiedades
-              
+
         public int RondasTotales
         {
             get { return rondasTotales; }
@@ -45,6 +48,7 @@ namespace PokeApi.ViewModels
                 //pokemonSeleccionado = value;
                 if (PreguntaActual != null && PreguntaActual.PokemonSeleccionado == null)
                 {
+                    haCambiado = true;
                     PreguntaActual.PokemonSeleccionado = value;
                     PreguntaActual.comprobarCorrecto(Contador);
                     PuntuacionTotal += PreguntaActual.Puntos;
@@ -79,34 +83,47 @@ namespace PokeApi.ViewModels
         #region Constructor
         public jugarVM()
         {
-            _ = cuentaAtras();
-            _ = cargarPregunta();
+            cuentaAtras();
             //insertarCommand = new DelegateCommand(insertarPuntuacion(),activarBoton());
         }
         #endregion
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         #region Funciones
         private async Task cuentaAtras()
         {
             bool res = true;
-            RondasTotales++;
-            Contador = 5;
-            //Lo he puesto a 1.5 segundos para que se vea mejor el efecto
-            if (RondasTotales <= 20)
-            {
-                Dispatcher.StartTimer(TimeSpan.FromSeconds(1.5), () =>
+            //Lo he puesto a 1.75 segundos para que se vea mejor el efecto
+                Dispatcher.StartTimer(TimeSpan.FromSeconds(1.75), () =>
                 {
-                    Contador -= 1;
-                    if (Contador <= 0)
+                    if (RondasTotales <= 20)
                     {
-                        _ = cuentaAtras();
-                        _ = cargarPregunta();
-                        res = false;
+                        Contador -= 1;
+                        if (Contador <= 0 || haCambiado)
+                        {
+                            cargarPregunta();
+                            RondasTotales++;
+                            Contador = 5;
+                            haCambiado = false;
+                            //cuentaAtras();
+                        }
+                        return res;
                     }
-                    return res;
+                    else
+                    {
+                        res = false;
+                        return res;
+                    }
                 });
             }
-        }
+    
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private async Task cargarPregunta()
         {
             int pokemonMax = 1025;
@@ -151,6 +168,12 @@ namespace PokeApi.ViewModels
             clsPokemon pokemonCorrecto = listaPokemon[indiceCorrecto];
 
             PreguntaActual = new clsPregunta(pokemonCorrecto, listaPokemon);
+            /*
+            if (preguntaActual != null && primeraVez)
+            {
+                cuentaAtras();
+                primeraVez = false;
+            }*/
         }
         #endregion
 

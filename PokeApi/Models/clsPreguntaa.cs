@@ -16,6 +16,7 @@ namespace PokeApi.Models
         private clsPokemon pokemonSeleccionado;
         private int puntos;
 
+
         public int Puntos
         {
             get { return puntos; }

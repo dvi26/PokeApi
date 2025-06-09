@@ -4,8 +4,15 @@
              x:Class="PokeApi.Views.jugar"
              Title="Jugar"
              xmlns:local="clr-namespace:PokeApi.ViewModels"
+             xmlns:animations="clr-namespace:AlohaKit.Animations;assembly=AlohaKit.Animations"
              BackgroundColor="White"
 >
+
+
+    <ContentPage.Resources>
+        
+
+    </ContentPage.Resources>
 
     <ContentPage.BindingContext>
         <local:jugarVM />

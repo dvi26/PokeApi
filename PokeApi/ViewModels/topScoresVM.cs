@@ -20,7 +20,7 @@ namespace PokeApi.ViewModels
         }
         public topScoresVM()
         {
-            _ = cargarListado();
+            cargarListado();
         }
 
         private async Task cargarListado()
