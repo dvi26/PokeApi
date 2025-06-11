@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DTO;
 using PokeApi.ViewModels;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace PokeApi.Models
 {
@@ -14,13 +15,14 @@ namespace PokeApi.Models
         private clsPokemon pokemonCorrecto;
         private ObservableCollection<clsPokemon> listaPokemons;
         private clsPokemon pokemonSeleccionado;
-        private int puntos;
+        //private int puntos;
+        private bool esCorrecto;
 
-
+        /*
         public int Puntos
         {
             get { return puntos; }
-        }
+        }*/
         public clsPokemon PokemonCorrecto
         {
             get { return pokemonCorrecto; }
@@ -34,7 +36,11 @@ namespace PokeApi.Models
         public clsPokemon PokemonSeleccionado
         {
             get { return pokemonSeleccionado; }
-            set { pokemonSeleccionado = value; }
+            set { pokemonSeleccionado = value; comprobarCorrecto(); }
+        }
+        public bool EsCorrecto
+        {
+            get { return esCorrecto; }
         }
         public clsPregunta(clsPokemon pokemonCorrecto, ObservableCollection<clsPokemon> listaPokemons)
         {
@@ -45,6 +51,7 @@ namespace PokeApi.Models
         {
 
         }
+        /*
         public void comprobarCorrecto(int segundosRestantes)
         {
             if (pokemonSeleccionado != null)
@@ -56,6 +63,20 @@ namespace PokeApi.Models
                 else
                 {
                     puntos = -1;
+                }
+            }
+        }*/
+        private void comprobarCorrecto()
+        {
+            if (pokemonSeleccionado != null)
+            {
+                if (pokemonSeleccionado.Id == pokemonCorrecto.Id)
+                {
+                    esCorrecto = true;
+                }
+                else
+                {
+                    esCorrecto = false;
                 }
             }
         }

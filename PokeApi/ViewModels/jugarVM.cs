@@ -27,7 +27,7 @@ namespace PokeApi.ViewModels
         private DelegateCommand empezarCommand;
         private DelegateCommand reiniciarCommand;
         private DelegateCommand rankingCommand;
-        private bool haCambiado = false;
+        //private bool haCambiado = false;
         private bool menuReglas = true;
         private bool vistaJuego = false;
         private bool vistaFinal = false;
@@ -60,10 +60,13 @@ namespace PokeApi.ViewModels
                 //pokemonSeleccionado = value;
                 if (PreguntaActual != null && PreguntaActual.PokemonSeleccionado == null)
                 {
-                    haCambiado = true;
+                    //haCambiado = true;
                     PreguntaActual.PokemonSeleccionado = value;
+                    /*
                     PreguntaActual.comprobarCorrecto(Contador);
-                    PuntuacionTotal += PreguntaActual.Puntos;
+                    PuntuacionTotal += PreguntaActual.Puntos;*/
+                    asignarPuntuacion();
+                    pasarRonda();
                 }
                 //NotifyPropertyChanged("PokemonSeleccionado");
             }
@@ -153,7 +156,9 @@ namespace PokeApi.ViewModels
         #region Constructor
         public jugarVM()
         {
-            //cargarPregunta();
+            // Carga la primera pregunta antes de arrancar el timer
+            cargarPregunta();
+
             empezarCommand = new DelegateCommand(empezarJuegoCommand);
             insertarCommand = new DelegateCommand(insertarPuntuacionCommand, activarBoton);
             reiniciarCommand = new DelegateCommand(reiniciarJuego);
@@ -170,12 +175,10 @@ namespace PokeApi.ViewModels
         /// <summary>
         /// Muestra la vista del juego, ademas hace que comience el timer/juego
         /// </summary>
-
         private async void empezarJuegoCommand()
         {
             MenuReglas = false;
-            // Carga la primera pregunta antes de arrancar el timer
-            await cargarPregunta();
+            //await cargarPregunta();
             VistaJuego = true;
             timer.Start();
             //handlerJuego();
@@ -199,34 +202,53 @@ namespace PokeApi.ViewModels
             timer.Start();
         }*/
 
-
         /// <summary>
-        /// Controla el juego, usa un timer que cada 1.75 segundos carga una pregunta. Cuando carga 20 preguntas el juego finaliza.
+        /// Timer que cada 1.75 segundos carga una pregunta.
         /// </summary>
         /// <returns></returns>
         private async void handlerJuego(object sender, EventArgs e)
         {
             Contador -= 1;
 
-            if (Contador <= 0 || haCambiado)
+            if (Contador <= 0)
             {
-                Contador = 5;
-                RondasTotales++;
-
-                if (RondasTotales < 2)
-                {
-                    await cargarPregunta();
-                    haCambiado = false;
-                }
-                else
-                {
-                    timer.Stop();
-                    VistaJuego = false;
-                    VistaFinal = true;
-                }
+                //await Task.Delay(2000);
+                pasarRonda();
             }
         }
-
+        /// <summary>
+        /// Asigna la puntuación total al jugador dependiendo de si la respuesta es correcta o no.
+        /// </summary>
+        private void asignarPuntuacion()
+        {
+            if (PreguntaActual.EsCorrecto)
+            {
+                PuntuacionTotal += Contador;
+            }
+            else
+            {
+                PuntuacionTotal -= 1;
+            }
+        }
+        /// <summary>
+        /// Pasa a la siguiente ronda, reinicia el contador y carga una nueva pregunta. Si se han jugado menos de 20 rondas, continúa el juego; si no, finaliza el juego.
+        /// </summary>
+        private async void pasarRonda()
+        {
+            //await Task.Delay(2000);
+            Contador = 5;
+            RondasTotales++;
+            if (RondasTotales < 2)
+            {
+                await cargarPregunta();
+            }
+            else
+            {
+                timer.Stop();
+                VistaJuego = false;
+                VistaFinal = true;
+            }
+        }
 
         /// <summary>
         /// Carga una pregunta aleatoria con 4 pokemons, uno de ellos es el correcto.
@@ -333,7 +355,10 @@ namespace PokeApi.ViewModels
                 haInsertado = "No se pudo insertar la puntuación, intente de nuevo.";
             }
         }
-
+        /// <summary>
+        /// Verifica si el botón de insertar puntuación debe estar activo o no, basado en si el nombre no es nulo.
+        /// </summary>
+        /// <returns></returns>
         private bool activarBoton()
         {
             bool res;
@@ -343,6 +368,8 @@ namespace PokeApi.ViewModels
             }
             else
             {
+                //await Application.Current.MainPage.DisplayAlert("Error", "Por favor, ingrese un nombre.", "Aceptar");
+                //Aqui deberia avisar a la vista
                 res = false;
             }
             return res;
@@ -351,8 +378,9 @@ namespace PokeApi.ViewModels
         /// <summary>
         /// Reinicia el juego, reseteando las puntuaciones y rondas totales, y volviendo al menú de reglas.
         /// </summary>
-        private void reiniciarJuego()
+        private async void reiniciarJuego()
         {
+            await cargarPregunta();
             Nombre = "";
             PuntuacionTotal = 0;
             RondasTotales = 0;
@@ -360,7 +388,9 @@ namespace PokeApi.ViewModels
             VistaFinal = false;
             MenuReglas = true;
         }
-
+        /// <summary>
+        /// Navega a la vista de ranking de puntuaciones.
+        /// </summary>
         private async void irARanking()
         {
             await Shell.Current.GoToAsync("///topScores");

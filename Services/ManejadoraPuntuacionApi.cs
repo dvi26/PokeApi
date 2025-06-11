@@ -70,9 +70,14 @@ namespace Services
                     HttpContent content = new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json");
 
                     HttpResponseMessage response = await httpClient.PostAsync(requestUri, content);
-                    filasAfectadas = (int)response.StatusCode;
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    //filasAfectadas = (int)response.StatusCode;
 
-                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    if (response.IsSuccessStatusCode)
+                    {
+                        filasAfectadas = Int32.Parse(jsonResponse);
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
                         throw new Exception("404");
                     }

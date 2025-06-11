@@ -14,7 +14,7 @@
                FontSize="28" 
                HorizontalOptions="Center" 
                FontAttributes="Bold" />
-
+        <ActivityIndicator IsRunning="{Binding ActivityIndicator}" IsVisible="{Binding ActivityIndicator}"/>
         <CollectionView ItemsSource="{Binding Puntuaciones}" 
                         SelectionMode="None"
                         EmptyView="No hay puntuaciones disponibles.">

@@ -12,22 +12,44 @@ namespace PokeApi.ViewModels
 {
     public class topScoresVM : INotifyPropertyChanged
     {
+        #region Atributos
         private List<clsPuntuacion> puntuaciones;
+        /// ActivityIndicator para mostrar el estado de carga
+        private bool activityIndicator;
+        #endregion
+
+        #region Propiedades
         public List<clsPuntuacion> Puntuaciones
         {
             get { return puntuaciones; }
             private set { puntuaciones = value; NotifyPropertyChanged("Puntuaciones"); }
         }
+        public bool ActivityIndicator
+        {
+            get { return activityIndicator; }
+            set { activityIndicator = value; NotifyPropertyChanged("ActivityIndicator"); }
+        }
+        #endregion
+
+        #region Constructor
         public topScoresVM()
         {
             cargarListado();
         }
+        #endregion
 
+        #region Funciones
+        /// <summary>
+        /// Funcion que trae y carga el listado desde la Api
+        /// </summary>
+        /// <returns></returns>
         private async Task cargarListado()
         {
             try
             {
+                ActivityIndicator = true;
                 Puntuaciones = await ManejadoraPuntuacionApi.getListadoPuntuacionesAsync();
+                ActivityIndicator = false;
             }
             catch (Exception ex)
             {
@@ -45,10 +67,15 @@ namespace PokeApi.ViewModels
                 }
             }
         }
+        /// <summary>
+        /// Funcion que se encargará de recargar el listado en el OnAppearing del codigo behind
+        /// </summary>
+        /// <returns></returns>
         public async Task recargarListado()
         {
             await cargarListado();
         }
+        #endregion
 
         #region NotifyPropertyChanged
 
