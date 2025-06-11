@@ -45,6 +45,10 @@ namespace PokeApi.ViewModels
                 }
             }
         }
+        public async Task recargarListado()
+        {
+            await cargarListado();
+        }
 
         #region NotifyPropertyChanged
 

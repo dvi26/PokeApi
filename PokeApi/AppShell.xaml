@@ -4,12 +4,16 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:PokeApi.Views"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Flyout"
     Title="PokeApi">
 
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:jugar}"
         Route="MainPage" />
+    <ShellContent
+        Title="Ranking"
+        ContentTemplate="{DataTemplate local:topScores}"
+        Route="topScores" />
 
 </Shell>
