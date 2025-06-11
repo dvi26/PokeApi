@@ -12,26 +12,21 @@ namespace PokeApi.Models
 {
     public class clsPregunta
     {
+        #region Atributos
         private clsPokemon pokemonCorrecto;
         private ObservableCollection<clsPokemon> listaPokemons;
         private clsPokemon pokemonSeleccionado;
-        //private int puntos;
         private bool esCorrecto;
+        #endregion
 
-        /*
-        public int Puntos
-        {
-            get { return puntos; }
-        }*/
+        #region Propiedades
         public clsPokemon PokemonCorrecto
         {
             get { return pokemonCorrecto; }
-            //set { pokemonCorrecto = value; }
         }
         public ObservableCollection<clsPokemon> ListaPokemons
         {
             get { return listaPokemons; }
-            //set { listaPokemons = value; }
         }
         public clsPokemon PokemonSeleccionado
         {
@@ -51,21 +46,9 @@ namespace PokeApi.Models
         {
 
         }
-        /*
-        public void comprobarCorrecto(int segundosRestantes)
-        {
-            if (pokemonSeleccionado != null)
-            {
-                if (pokemonSeleccionado.Id == pokemonCorrecto.Id)
-                {
-                    puntos += segundosRestantes;
-                }
-                else
-                {
-                    puntos = -1;
-                }
-            }
-        }*/
+        #endregion
+
+        #region Funciones
         private void comprobarCorrecto()
         {
             if (pokemonSeleccionado != null)
@@ -80,6 +63,7 @@ namespace PokeApi.Models
                 }
             }
         }
+        #endregion
     }
 }
 

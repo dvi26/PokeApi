@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using ApiMaui.Resources;
 using DTO;
 using ENT;
 using PokeApi.Models;
-using PokeApi.Views;
 using Services;
 
 namespace PokeApi.ViewModels
@@ -21,20 +15,18 @@ namespace PokeApi.ViewModels
         private int contador = 5;
         private clsPregunta preguntaActual;
         private int puntuacionTotal;
-        //private clsPokemon pokemonSeleccionado;
         private int rondasTotales = 0;
         private DelegateCommand insertarCommand;
         private DelegateCommand empezarCommand;
         private DelegateCommand reiniciarCommand;
         private DelegateCommand rankingCommand;
-        //private bool haCambiado = false;
         private bool menuReglas = true;
         private bool vistaJuego = false;
         private bool vistaFinal = false;
-        //private bool primeraVez = true;
         private IDispatcherTimer timer;
         private string nombre;
         private string haInsertado;
+        private string color;
         private bool visibilidadRanking = false;
 
         #endregion
@@ -52,24 +44,24 @@ namespace PokeApi.ViewModels
             get { return puntuacionTotal; }
             private set { puntuacionTotal = value; NotifyPropertyChanged("PuntuacionTotal"); }
         }
+
         public clsPokemon PokemonSeleccionado
         {
-            //get { return PreguntaActual.PokemonSeleccionado; }
             set
             {
-                //pokemonSeleccionado = value;
                 if (PreguntaActual != null && PreguntaActual.PokemonSeleccionado == null)
                 {
-                    //haCambiado = true;
                     PreguntaActual.PokemonSeleccionado = value;
-                    /*
-                    PreguntaActual.comprobarCorrecto(Contador);
-                    PuntuacionTotal += PreguntaActual.Puntos;*/
                     asignarPuntuacion();
                     pasarRonda();
                 }
-                //NotifyPropertyChanged("PokemonSeleccionado");
             }
+        }
+
+        public string Color
+        {
+            get { return color; }
+            set { color = value; NotifyPropertyChanged("Color"); }
         }
 
         public clsPregunta PreguntaActual
@@ -165,7 +157,7 @@ namespace PokeApi.ViewModels
             rankingCommand = new DelegateCommand(irARanking);
 
             timer = Application.Current.Dispatcher.CreateTimer();
-            timer.Interval = TimeSpan.FromSeconds(1.75);
+            timer.Interval = TimeSpan.FromSeconds(1.5);
             timer.Tick += handlerJuego;
         }
         #endregion
@@ -178,32 +170,12 @@ namespace PokeApi.ViewModels
         private async void empezarJuegoCommand()
         {
             MenuReglas = false;
-            //await cargarPregunta();
             VistaJuego = true;
             timer.Start();
-            //handlerJuego();
         }
 
-        /*
-        private async void empezarJuegoCommand()
-        {
-            MenuReglas = false;
-
-            try
-            {
-                await cargarPregunta();
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", "Error al cargar pregunta inicial: " + ex.Message, "Aceptar");
-            }
-
-            VistaJuego = true;
-            timer.Start();
-        }*/
-
         /// <summary>
-        /// Timer que cada 1.75 segundos carga una pregunta.
+        /// Timer que cada 1.5 segundos carga una pregunta.
         /// </summary>
         /// <returns></returns>
         private async void handlerJuego(object sender, EventArgs e)
@@ -212,10 +184,10 @@ namespace PokeApi.ViewModels
 
             if (Contador <= 0)
             {
-                //await Task.Delay(2000);
                 pasarRonda();
             }
         }
+
         /// <summary>
         /// Asigna la puntuación total al jugador dependiendo de si la respuesta es correcta o no.
         /// </summary>
@@ -224,21 +196,27 @@ namespace PokeApi.ViewModels
             if (PreguntaActual.EsCorrecto)
             {
                 PuntuacionTotal += Contador;
+                Color = "#388E3C"; 
             }
             else
             {
                 PuntuacionTotal -= 1;
+                Color = "#D32F2F"; 
             }
         }
+
         /// <summary>
         /// Pasa a la siguiente ronda, reinicia el contador y carga una nueva pregunta. Si se han jugado menos de 20 rondas, continúa el juego; si no, finaliza el juego.
         /// </summary>
         private async void pasarRonda()
         {
-            //await Task.Delay(2000);
+            timer.Stop();
+            await Task.Delay(2000);
+            Color = "#FFFFFF"; 
+            timer.Start();
             Contador = 5;
             RondasTotales++;
-            if (RondasTotales < 2)
+            if (RondasTotales <= 20)
             {
                 await cargarPregunta();
             }
@@ -298,12 +276,6 @@ namespace PokeApi.ViewModels
             clsPokemon pokemonCorrecto = listaPokemon[indiceCorrecto];
 
             PreguntaActual = new clsPregunta(pokemonCorrecto, listaPokemon);
-            /*
-            if (preguntaActual != null && primeraVez)
-            {
-                cuentaAtras();
-                primeraVez = false;
-            }*/
         }
 
         /// <summary>
@@ -348,13 +320,13 @@ namespace PokeApi.ViewModels
             {
                 HaInsertado = "Puntuación insertada correctamente";
                 VisibilidadRanking = true;
-                //reiniciarJuego();
             }
             else
             {
                 haInsertado = "No se pudo insertar la puntuación, intente de nuevo.";
             }
         }
+
         /// <summary>
         /// Verifica si el botón de insertar puntuación debe estar activo o no, basado en si el nombre no es nulo.
         /// </summary>
@@ -362,14 +334,12 @@ namespace PokeApi.ViewModels
         private bool activarBoton()
         {
             bool res;
-            if (!string.IsNullOrEmpty(Nombre) && PuntuacionTotal >= 0)
+            if (!string.IsNullOrEmpty(Nombre))
             {
                 res = true;
             }
             else
             {
-                //await Application.Current.MainPage.DisplayAlert("Error", "Por favor, ingrese un nombre.", "Aceptar");
-                //Aqui deberia avisar a la vista
                 res = false;
             }
             return res;
@@ -388,6 +358,7 @@ namespace PokeApi.ViewModels
             VistaFinal = false;
             MenuReglas = true;
         }
+
         /// <summary>
         /// Navega a la vista de ranking de puntuaciones.
         /// </summary>
@@ -395,37 +366,6 @@ namespace PokeApi.ViewModels
         {
             await Shell.Current.GoToAsync("///topScores");
         }
-
-
-        //Timer alterno, tendria que heredar de BindableObject
-        /*
-        private async Task handlerJuego()
-        {
-            bool res = true;
-            //Lo he puesto a 1.75 segundos para que se vea mejor el efecto
-                Dispatcher.StartTimer(TimeSpan.FromSeconds(1.75), () =>
-                {
-                    if (RondasTotales <= 20)
-                    {
-                        Contador -= 1;
-                        if (Contador <= 0 || haCambiado)
-                        {
-                            cargarPregunta();
-                            RondasTotales++;
-                            Contador = 5;
-                            haCambiado = false;
-                            VistaJuego = true;
-                            //cuentaAtras();
-                        }
-                        return res;
-                    }
-                    else
-                    {
-                        res = false;
-                        return res;
-                    }
-                });
-            }*/
         #endregion
 
         #region NotifyPropertyChanged

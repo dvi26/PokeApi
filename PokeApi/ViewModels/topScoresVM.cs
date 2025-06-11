@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using ApiMaui.Resources;
 using ENT;
 using Services;
 
@@ -16,6 +12,7 @@ namespace PokeApi.ViewModels
         private List<clsPuntuacion> puntuaciones;
         /// ActivityIndicator para mostrar el estado de carga
         private bool activityIndicator;
+        private DelegateCommand juegoCommand;
         #endregion
 
         #region Propiedades
@@ -29,12 +26,17 @@ namespace PokeApi.ViewModels
             get { return activityIndicator; }
             set { activityIndicator = value; NotifyPropertyChanged("ActivityIndicator"); }
         }
+        public DelegateCommand JuegoCommand
+        {
+            get { return juegoCommand; }
+        }
         #endregion
 
         #region Constructor
         public topScoresVM()
         {
             cargarListado();
+            juegoCommand = new DelegateCommand(irAJuego);
         }
         #endregion
 
@@ -74,6 +76,14 @@ namespace PokeApi.ViewModels
         public async Task recargarListado()
         {
             await cargarListado();
+        }
+
+        /// <summary>
+        /// Navega a la vista del juego.
+        /// </summary>
+        private async void irAJuego()
+        {
+            await Shell.Current.GoToAsync("///jugar");
         }
         #endregion
 

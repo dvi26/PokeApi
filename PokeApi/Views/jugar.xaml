@@ -1,134 +1,199 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PokeApi.Views.jugar"
-             Title="Jugar"
              xmlns:local="clr-namespace:PokeApi.ViewModels"
-             xmlns:animations="clr-namespace:AlohaKit.Animations;assembly=AlohaKit.Animations"
-             BackgroundColor="White">
+             >
 
     <ContentPage.BindingContext>
         <local:jugarVM />
     </ContentPage.BindingContext>
+   
+        <Grid>
 
-    <Grid>
+            <Image Source="bg_pokeball.jpeg"
+               Aspect="AspectFill"
+               Opacity="0.15"
+               HorizontalOptions="Center"
+               VerticalOptions="Fill"
+               WidthRequest="420" />
 
-        <!-- Menu inicial -->
-        <StackLayout x:Name="MenuInicial" BackgroundColor="White" Padding="30" IsVisible="{Binding MenuReglas}">
-            <Label Text="Reglas del juego:"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   TextColor="Black"
-                   HorizontalOptions="Center" />
-            <Label Text="• Tienes 20 preguntas.
-                   • Cada acierto suma los segundos restantes.
-                   • Un fallo resta 1 punto.
-                   • No responder no afecta tu puntuación."
-                   FontSize="18"
-                   TextColor="Black"
-                   Margin="0,20,0,20" />
-            <Button Text="Empezar"
-                    FontSize="20"
-                    Command="{Binding EmpezarCommand}"
-                    BackgroundColor="Green"
-                    TextColor="White"
-                    HorizontalOptions="Center" />
+        <Frame BackgroundColor="Transparent"  
+           HasShadow="False"
+       HorizontalOptions="Center"
+       VerticalOptions="Fill"
+       WidthRequest="420">
+            <Grid Padding="20" RowSpacing="15" ColumnSpacing="10">
 
-            <Button Text="Ver tu puntuacion en el Ranking"
-Command="{Binding RankingCommand}"
-BackgroundColor="Blue"
+                <!-- Menú inicial -->
+                <Frame IsVisible="{Binding MenuReglas}" CornerRadius="20" BorderColor="Transparent" BackgroundColor="White" Padding="25" HasShadow="True" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="350">
+                    <StackLayout Spacing="20">
+                        <Label Text="Reglas del juego:"
+                       FontSize="28"
+                       FontFamily="PokemonSolid"
+                       TextColor="#D32F2F"
+                       HorizontalOptions="Center" />
+                        <StackLayout Spacing="5">
+                            <Label Text="• Tienes 20 preguntas."
+           FontSize="18"
+           FontFamily="Fredoka"
+           TextColor="#444" />
+
+                            <Label Text="• Cada acierto suma los segundos restantes."
+           FontSize="18"
+           FontFamily="Fredoka"
+           TextColor="#444" />
+
+                            <Label Text="• Un fallo resta 1 punto."
+           FontSize="18"
+           FontFamily="Fredoka"
+           TextColor="#444" />
+
+                            <Label Text="• No responder no afecta tu puntuación."
+           FontSize="18"
+           FontFamily="Fredoka"
+           TextColor="#444" />
+                        </StackLayout>
+
+
+                        <Button Text="Empezar"
+                        FontSize="22"
+                        Command="{Binding EmpezarCommand}"
+                        BackgroundColor="#FBC02D"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        CornerRadius="15"
+                        HorizontalOptions="Fill" />
+
+                        <Button Text="Ver tu puntuación en el Ranking"
+                        Command="{Binding RankingCommand}"
+                        BackgroundColor="#0288D1"
+                        TextColor="White"
+                        FontSize="18"
+                        CornerRadius="15"
+                        HorizontalOptions="Fill" />
+                    </StackLayout>
+                </Frame>
+
+                <!-- Vista del juego -->
+                <VerticalStackLayout IsVisible="{Binding VistaJuego}" Spacing="20" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="350">
+
+                    <Grid>
+                        <Label Text="{Binding PuntuacionTotal}" FontSize="20" TextColor="#FFA000" HorizontalOptions="Start" FontFamily="Fredoka"/>
+                        <Label Text="{Binding RondasTotales, StringFormat='Rondas: {0} / 20'}" FontSize="20" TextColor="#FFA000" FontAttributes="Bold" HorizontalOptions="End" FontFamily="Fredoka"/>
+                    </Grid>
+
+                    <Frame BackgroundColor="#FFA000" Padding="10" CornerRadius="30" HorizontalOptions="Center" BorderColor="Transparent">
+                        <Label Text="{Binding Contador}"  FontSize="64" FontAttributes="Bold" TextColor="{Binding Color}" HorizontalOptions="Center" FontFamily="PokemonSolid" />
+                    </Frame>
+
+                    <Frame CornerRadius="20" Padding="0" HasShadow="True" HorizontalOptions="Center" WidthRequest="250" HeightRequest="250" BorderColor="Transparent" BackgroundColor="Transparent">
+                        <Grid>
+                            <Image Source="pokeball_bg.png"
+               Aspect="AspectFill"
+               Opacity="0.1"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+
+                            <Image Source="{Binding PreguntaActual.PokemonCorrecto.Foto}"
+               WidthRequest="220"
+               HeightRequest="220"
+               Aspect="AspectFit"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+
+
+                    <CollectionView ItemsSource="{Binding PreguntaActual.ListaPokemons}" 
+                SelectionMode="Single" 
+                SelectedItem="{Binding PokemonSeleccionado, Mode=TwoWay}" 
+                HeightRequest="300">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BorderColor="#FFA000" CornerRadius="15" Padding="12" Margin="5" HasShadow="True" BackgroundColor="White">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="White" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="#FFD54F" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <Label Text="{Binding Nombre}" FontSize="20" TextColor="#444" HorizontalOptions="Center" FontFamily="Fredoka" />
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+
+                <!-- Vista final -->
+                <Frame IsVisible="{Binding VistaFinal}" BackgroundColor="White" CornerRadius="25" Padding="30" HasShadow="True" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="350" BorderColor="Transparent">
+                    <StackLayout Spacing="25" HorizontalOptions="Center">
+
+                        <Label Text="¡Has terminado!"
+                       FontSize="28"
+                       FontFamily="PokemonSolid"
+                       TextColor="#388E3C"
+                       HorizontalOptions="Center" />
+
+                        <Label Text="{Binding PuntuacionTotal, StringFormat='Puntuación final: {0} puntos'}"
+                       FontSize="20"
+                       TextColor="#333"
+                       FontFamily="Fredoka"
+                       HorizontalOptions="Center" />
+
+                        <Frame Padding="12" CornerRadius="20" BackgroundColor="#F5F5F5" HasShadow="False" WidthRequest="280" HorizontalOptions="Center">
+                            <Entry Placeholder="Introduce tu nombre"
+                           Text="{Binding Nombre}"
+                           FontSize="18"
+                           BackgroundColor="Transparent"
+                           FontFamily="Fredoka"
+                           TextColor="#222" />
+                        </Frame>
+
+                        <Button Text="Guardar puntuación"
+                        Command="{Binding InsertarCommand}"
+                        BackgroundColor="#1976D2"
+                        TextColor="White"
+                        FontSize="18"
+                        CornerRadius="15"
+                        WidthRequest="280"
+                        HorizontalOptions="Center" />
+
+                        <Button Text="Reiniciar Partida"
+Command="{Binding ReiniciarCommand}"
+BackgroundColor="#1976D2"
 TextColor="White"
 FontSize="18"
-WidthRequest="200"
-HorizontalOptions="Center"     />
-        </StackLayout>
+CornerRadius="15"
+WidthRequest="280"
+HorizontalOptions="Center" />
 
-        <!-- Vista del juego -->
-        <VerticalStackLayout x:Name="VistaJuego" Padding="20" Spacing="25" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="{Binding VistaJuego}">
-            <Label Text="{Binding PuntuacionTotal}" FontSize="18" TextColor="Black" HorizontalOptions="Start" />
-            <Label Text="{Binding RondasTotales , StringFormat='Rondas Totales: {0} /20'}" FontSize="18" TextColor="Black" HorizontalOptions="End" />
-            <Label Text="{Binding Contador}" FontSize="48" FontAttributes="Bold" HorizontalOptions="Center" TextColor="DarkRed"/>
-            <Image Source="{Binding PreguntaActual.PokemonCorrecto.Foto}" HeightRequest="200" WidthRequest="200" HorizontalOptions="Center" />
+                        <Label Text="{Binding HaInsertado}"
+                       FontSize="18"
+                       TextColor="#444"
+                       FontFamily="Fredoka"
+                       HorizontalOptions="Center" />
 
-            <CollectionView ItemsSource="{Binding PreguntaActual.ListaPokemons}" SelectionMode="Single" SelectedItem="{Binding PokemonSeleccionado, Mode=TwoWay}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <ContentView>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroupList>
-                                    <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal" />
-                                        <VisualState x:Name="Selected">
-                                            <VisualState.Setters>
-                                                <Setter Property="BackgroundColor" Value="LightSkyBlue" />
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                </VisualStateGroupList>
-                            </VisualStateManager.VisualStateGroups>
-
-                            <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" Margin="5">
-                                <Label Text="{Binding Nombre}" 
-                                       FontSize="20" 
-                                       HorizontalOptions="Center" 
-                                       VerticalOptions="Center" />
-                            </Frame>
-                        </ContentView>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
-
-        <!-- Mostrar resultado e insertar-->
-        <StackLayout x:Name="VistaFinal" Padding="30" IsVisible="{Binding VistaFinal}" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="White" Spacing="20">
-            <Label Text="¡Has terminado!"
-                   FontSize="26"
-                   FontAttributes="Bold"
-                   TextColor="DarkGreen"
-                   HorizontalOptions="Center" />
-
-            <Label Text="{Binding PuntuacionTotal, StringFormat='Puntuación final: {0} puntos'}"
-                   FontSize="20"
-                   TextColor="Black"
-                   HorizontalOptions="Center" />
-
-            <Entry Placeholder="Introduce tu nombre"
-                   Text="{Binding Nombre}"
-                   FontSize="18"
-                   WidthRequest="250"
-                   BackgroundColor="#EFEFEF"
-                   TextColor="Black" />
-
-            <Button Text="Guardar puntuación"
-                    Command="{Binding InsertarCommand}"
-                    BackgroundColor="Blue"
-                    TextColor="White"
-                    FontSize="18"
-                    WidthRequest="200"
-                    HorizontalOptions="Center" />
-
-            <Label Text="{Binding HaInsertado}"
-                    FontSize="20"
-                    TextColor="Black"
-                    HorizontalOptions="Center" />
-
-            <Button Text="Reiniciar Partida"
-                Command="{Binding ReiniciarCommand}"
-                BackgroundColor="Blue"
-                TextColor="White"
-                FontSize="18"
-                WidthRequest="200"
-                HorizontalOptions="Center" 
-                />
-
-            <Button Text="Ver tu puntuacion en el Ranking"
-    Command="{Binding RankingCommand}"
-    BackgroundColor="Blue"
-    TextColor="White"
-    FontSize="18"
-    WidthRequest="200"
-    HorizontalOptions="Center" 
-                    IsVisible="{Binding VisibilidadRanking}"
-       />
-        </StackLayout>
+                        <Button Text="Ir a Ranking"
+                        Command="{Binding RankingCommand}"
+                        BackgroundColor="#1976D2"
+                        TextColor="White"
+                        FontSize="18"
+                        CornerRadius="15"
+                        WidthRequest="280"
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding VisibilidadRanking}" />
+                    </StackLayout>
+                </Frame>
+            </Grid>
+        </Frame>
     </Grid>
 </ContentPage>

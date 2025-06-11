@@ -10,7 +10,7 @@
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:jugar}"
-        Route="MainPage" />
+        Route="jugar" />
     <ShellContent
         Title="Ranking"
         ContentTemplate="{DataTemplate local:topScores}"
